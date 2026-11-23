@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@lucasmarkes/hairline": "^0.5.1",
+    "@breezystack/lamejs": "1.2.7"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  },
+  "scripts": {
+    "build:receiver": "esbuild receiver.mjs --bundle --format=iife --outfile=receiver.js"
+  }
+}

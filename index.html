@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light">
+<title>Solar Resonance · Sonification notebook</title><link rel="stylesheet" href="studio.css">
+</head><body>
+<a class="skip" href="#instrument">Skip to player</a>
+<header class="top" id="top"><div class="wrap mast">
+  <a href="#top" class="brand"><span class="sun-mark" aria-hidden="true"></span>Solar Resonance Notebook</a>
+  <nav aria-label="Notebook"><a href="#instrument">Listen</a><a href="#receiver-exhibit">Receiver</a><a id="method-link" href="#method">Notes</a></nav>
+</div></header>
+<main>
+<section class="hero wrap" aria-labelledby="title">
+  <div class="hero-copy">
+    <h1 id="title">Solar<br>Resonance<span>.</span></h1>
+    <p class="lede">Hear a year of sunspots unfold along the Sun’s figure-eight path.</p>
+    <p id="span" class="window"></p>
+  </div>
+  <figure class="hero-figure">
+    <div class="solar-portrait">
+      <div class="sun-fallback" aria-hidden="true"></div>
+      <canvas id="sun" role="img" aria-label="Illustration of the solar disk with its bright limb and corona"></canvas>
+    </div>
+    <figcaption>Solar disk <span class="portrait-credit">Illustration</span><a class="fallback-credit" href="https://sdo.gsfc.nasa.gov/assets/img/browse/2026/11/23/20261123_000622_1024_0171.jpg">NASA SDO / AIA</a></figcaption>
+  </figure>
+</section>
+<div class="wrap">
+  <section id="instrument" class="instrument" aria-labelledby="player-title">
+    <div class="section-head"><h2 id="player-title">Listen to the year</h2><span id="score-length" class="mono"></span></div>
+    <div class="workbench">
+      <div class="stage">
+        <div class="transport">
+          <div class="play-dial" id="play-dial"><button id="play" class="primary" type="button" aria-label="Play score"><span id="play-label" class="sr-only">Play score</span></button></div>
+          <div class="progress-block">
+            <div class="timing"><span id="elapsed">—</span><button id="reset" type="button" disabled>Back to start</button></div>
+            <progress id="timeline" value="0" max="1" aria-label="Playback position"></progress>
+            <p class="status" role="status" id="status"></p>
+          </div>
+        </div>
+        <div class="plot-head"><h3>The analemma</h3><span id="graph-date" class="mono"></span></div>
+        <div class="plot">
+          <span class="axis-y">Declination <span>(°)</span></span>
+          <canvas id="chart" role="img" aria-label="Annual figure eight with a marker on the selected date"></canvas>
+          <ol class="ticks-y" aria-hidden="true"><li>20</li><li>10</li><li>0</li><li>−10</li><li>−20</li></ol>
+          <ol class="ticks-x" aria-hidden="true"><li>−15</li><li>−10</li><li>−5</li><li>0</li><li>5</li><li>10</li><li>15</li></ol>
+          <span class="axis-x">Equation of time <span>(minutes)</span></span>
+        </div>
+        <div class="chart-key" id="coverage" hidden>
+          <span class="key-item"><i class="key-dot" aria-hidden="true"></i><span id="observed-count"></span></span>
+          <span class="key-item"><i class="key-gap" aria-hidden="true"></i><span id="missing-count"></span></span>
+          <span class="key-item" id="year-context" hidden><i class="key-line" aria-hidden="true"></i>Rest of year</span>
+        </div>
+      </div>
+      <div id="settings" class="controls" aria-labelledby="control-title">
+        <h3 id="control-title">Score settings</h3>
+        <div class="fields">
+          <label>Start from<select id="origin"><option value="month" selected>First day of this month</option><option value="custom">Choose a date</option></select></label>
+          <label id="custom" hidden>Starting date<input type="date" id="date" aria-describedby="date-error"><span class="date-error" id="date-error" hidden></span></label>
+          <label>Route<select id="route"><option value="outward" selected>Spread outward</option><option value="forward">Forward through dates</option></select></label>
+          <label>Hear sunspots as<select id="mode"><option value="voices" selected>Simultaneous voices</option><option value="pulses">Pulses</option><option value="color">Tone color</option></select></label>
+          <label>Pace<select id="pace"><option value="5" selected>5 days per second</option><option value="2">2 days per second</option><option value="1">1 day per second · 30 days</option></select></label>
+        </div>
+        <div class="export"><p>Download playback</p><div class="formats"><button type="button" data-format="wav" aria-label="Download current playback as WAV">WAV</button><button type="button" data-format="mp3" aria-label="Download current playback as MP3">MP3</button></div></div>
+        <p id="export-status" class="status" role="status"></p>
+      </div>
+    </div>
+  </section>
+</div>
+<section class="receiver-exhibit" id="receiver-exhibit" aria-labelledby="receiver-title">
+  <div class="wrap exhibit-grid">
+    <div class="exhibit-copy">
+      <h2 id="receiver-title">The solar<br>receiver.</h2>
+      <p>The dish plots the dark features detected in each day’s NASA solar image. Their left and right positions place voices in stereo. In the default score, their height and size help set each voice’s pitch.</p>
+      <p class="receiver-hint" id="receiver-hint">Move your pointer over the dish to aim it, or focus it and use the arrow keys.</p>
+      <div class="observation">
+        <canvas id="disk" role="img" aria-label="Detected features on the solar disk"></canvas>
+        <div><p id="day" class="mono"></p><p id="spots"></p><a id="image-link" target="_blank" rel="noopener">View source image</a></div>
+      </div>
+    </div>
+    <figure class="receiver-figure">
+      <div id="receiver" tabindex="0" aria-describedby="receiver-hint"></div>
+      <canvas id="receiver-gl" aria-hidden="true"></canvas>
+      <figcaption id="receiver-readout" class="mono" aria-hidden="true"></figcaption>
+    </figure>
+  </div>
+</section>
+<div class="wrap notebook">
+<section class="clips" id="clips"><div class="test-copy"><h2>Which week sounds busier?</h2><p>Close your eyes and try both clips. Each plays November 24 through December 7, 2025, at one day per second. The second week begins at 0:07.</p></div><div class="clip-pair">
+  <article class="clip"><div class="clip-title"><h3>Clip A</h3><span>14 seconds</span></div><audio controls preload="metadata" src="comparison-a.wav" aria-label="Play comparison clip A"></audio><div class="clip-links">Download <a download href="comparison-a.wav" aria-label="Download clip A as WAV">WAV</a><a download href="comparison-a.mp3" aria-label="Download clip A as MP3">MP3</a></div></article>
+  <article class="clip"><div class="clip-title"><h3>Clip B</h3><span>14 seconds</span></div><audio controls preload="metadata" src="comparison-b.wav" aria-label="Play comparison clip B"></audio><div class="clip-links">Download <a download href="comparison-b.wav" aria-label="Download clip B as WAV">WAV</a><a download href="comparison-b.mp3" aria-label="Download clip B as MP3">MP3</a></div></article></div>
+<details class="reveal"><summary>Reveal the observations and mappings</summary><p>The second week averaged 23.0 detected dark features per image, compared with 7.9 in the first week. Clip A changes pulse density. Clip B changes tone color. Both use the same seasonal notes, dates, and pace, with integrated loudness matched to −19 LUFS.</p></details></section>
+<details class="method" id="method"><summary>Score notes and data sources</summary>
+<dl><dt>Figure eight</dt><dd>Each day has an approximate solar declination and equation of time. Height selects a note from a C Lydian chord spread across registers. Horizontal position pans that melody and shifts its attack within the beat, so the two axes also leave cues in mono.</dd>
+<dt>Spot voices</dt><dd>Left and right on the disk set stereo position. Vertical position selects a register or chord tone. In pulse and voice modes a larger dark core drops an octave. The pulse mode spreads spots into more attacks on busy days. Tone color adds upper harmonics, while voice mode stacks individual tones.</dd>
+<dt>Harmony</dt><dd>A soft chord tone from each active day rings beneath the next two active days. Its pitch follows a fixed interval pattern within the mode. Changing the starting date or route changes the harmony leading into a day.</dd>
+<dt>Solar images</dt><dd>One NASA SDO/HMI continuum frame per available UTC day, retrieved through Helioviewer near 03:00 UTC, with a midday fallback. The detector finds connected dark cores in a 768-pixel image and keeps their projected positions and sizes. Small spots and features near the limb can be missed. Counts describe what the detector resolved.</dd>
+<dt>Silence</dt><dd>A usable image with zero detections gets one quiet base note. An unavailable or rejected frame gets a full silent beat. Both interrupt sustained harmony.</dd>
+<dt>Travel</dt><dd>The forward route wraps within the 365-date window and visits each date once. The outward route alternates earlier and later dates from the starting point. The close-up stops after 30 positions.</dd>
+<dt>Observation window</dt><dd>This edition uses the archived observations listed above the player.</dd></dl>
+<p>The pitch choices adapt Matt Russo’s approach to specifying a mapping’s range, direction and scaling. The overlapping chord tones draw on Rick Beato’s use of a repeating voicing within a mode.</p>
+<p class="sources">Sources · <a href="https://sdo.gsfc.nasa.gov/data/channels.php">NASA SDO/HMI</a> · <a href="https://api.helioviewer.org/docs/v2/appendix/data_sources.html">Helioviewer archive</a> · <a href="https://gml.noaa.gov/grad/solcalc/solareqns.PDF">NOAA solar position equations</a> · <a href="https://github.com/lucasmarkes/hairline">Hairline receiver artwork</a></p></details></div></main>
+<script src="observations.js"></script><script src="score.js"></script><script src="visuals.js"></script><script src="receiver.js"></script>
+<script src="assets/lamejs.iife.js"></script><script src="audio-export.js"></script><script src="player.js"></script>
+</body></html>
